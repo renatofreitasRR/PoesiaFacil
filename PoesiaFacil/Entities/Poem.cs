@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using PoesiaFacil.Entities.Contracts;
 
 namespace PoesiaFacil.Entities
 {
-    public class Poem
+    public class Poem : IEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

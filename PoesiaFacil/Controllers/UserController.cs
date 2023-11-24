@@ -30,21 +30,18 @@ namespace PoesiaFacil.Controllers
             _context = context;
         }
 
-        // GET: api/<UserController>
         [HttpGet()]
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+            return await _userRepository.GetAllWithParamsAsync(x => true);
         }
 
-        // GET: api/<UserController>
         [HttpGet("{id}")]
         public async Task<User> GetAsync(string id)
         {
-            return await _userRepository.GetAsync(id);
+            return await _userRepository.GetWithParamsAsync(x => x.Id == id);
         }
 
-        // POST api/<UserController>
         [HttpPost]
         public async Task PostAsync([FromBody] CreateUserInputModel user)
         {
@@ -55,7 +52,7 @@ namespace PoesiaFacil.Controllers
         [AllowAnonymous]
         public async Task<object> SignInAsync(string email, string password)
         {
-            User user = await _userRepository.GetByEmailAsync(email);
+            User user = await _userRepository.GetWithParamsAsync(x => x.Email == email);
 
             if (user == null)
                 throw new Exception("Usuário não encontrado");
@@ -70,21 +67,12 @@ namespace PoesiaFacil.Controllers
             return new { token, user };
         }
 
-        //// PUT api/<UserController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public async Task DeactivateAsync(string id)
         {
             await _userRepository.DeactivateAsync(id);
         }
 
-
-        // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public async Task ActivateAsync(string id)
         {

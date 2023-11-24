@@ -1,10 +1,11 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using Microsoft.AspNetCore.Identity;
+using PoesiaFacil.Entities.Contracts;
 
 namespace PoesiaFacil.Entities
 {
-    public class User
+    public class User : IEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

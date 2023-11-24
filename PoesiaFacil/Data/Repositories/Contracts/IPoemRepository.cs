@@ -1,13 +1,10 @@
 ﻿using PoesiaFacil.Entities;
+using PoesiaFacil.Models.ViewModels;
 
 namespace PoesiaFacil.Data.Repositories.Contracts
 {
-    public interface IPoemRepository
+    public interface IPoemRepository : IBaseRepository<Poem>
     {
-        Task CreateAsync(Poem poem);
-        Task UpdateAsync(Poem poem);
-        Task DeleteAsync(string id);
-        Task<IEnumerable<Poem>> GetAllByUserAsync(string id);
-        Task<Poem> GetAsync(string id);
+        Task<Pagination<Poem>> GeAllPaginatedAsync(int page = 1, int size = 10, string search = "");
     }
 }

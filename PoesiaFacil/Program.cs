@@ -27,7 +27,7 @@ builder.Services
         x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection(SecretKeySettings.Secret).ToString())),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKeySettings.Secret)),
             ValidateIssuer = false,
             ValidateAudience = false
         };

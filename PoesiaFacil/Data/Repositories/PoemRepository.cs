@@ -1,53 +1,38 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using PoesiaFacil.Data.Context;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
+using PoesiaFacil.Models.ViewModels;
+using System;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace PoesiaFacil.Data.Repositories
 {
-    public class PoemRepository : DataContext, IPoemRepository
+    public class PoemRepository : BaseRepository<Poem>, IPoemRepository
     {
-        private readonly IMongoCollection<Poem> _poemCollection;
-
         public PoemRepository() : base("Poems")
         {
-            _poemCollection = this._mongoDatabase.GetCollection<Poem>(this._collectionName);
+            
         }
 
-        public async Task CreateAsync(Poem poem)
+        public async Task<Pagination<Poem>> GeAllPaginatedAsync(int page = 1, int size = 10, string search = "")
         {
-            await _poemCollection.InsertOneAsync(poem);
-        }
-
-        public async Task UpdateAsync(Poem poem)
-        {
-            await this.UpdateAsync(poem);
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            await _poemCollection.DeleteOneAsync(x => x.Id == id);
-        }
-
-        public async Task<IEnumerable<Poem>> GetAllByUserAsync(string id)
-        {
-            var poems = await _poemCollection
-                .Find(x => x.Id == id)
+            var data = await _collection
+                .Find(x => x.Title.ToLower().Contains(search.ToLower()) || x.Text.ToLower().Contains(search.ToLower()))
+                .Skip((page - 1) * size)
+                .Limit(size)
                 .ToListAsync();
 
-            return poems;
-        }
+            var pagination = new Pagination<Poem>()
+            {
+                Items = data,
+                PageIndex = page,
+                Search = search,
+                TotalPages = data.Count
+            };
 
-        public async Task<Poem> GetAsync(string id)
-        {
-            var poem = await _poemCollection
-                .Find(x => x.Id == id)
-                .FirstOrDefaultAsync();
-
-            if (poem is null)
-                throw new Exception();
-
-            return poem;
+            return pagination;
         }
     }
 }
