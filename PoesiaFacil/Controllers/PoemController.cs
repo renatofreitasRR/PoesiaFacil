@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoesiaFacil.Controllers.Contracts;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
 using PoesiaFacil.Models.InputModels.Poem;
 using PoesiaFacil.Models.ViewModels;
 using PoesiaFacil.Services.Contracts;
+using System.Drawing;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,38 +28,51 @@ namespace PoesiaFacil.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Poem>> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync()
         {
-            return await _poemRepository.GetAllWithParamsAsync(x => true);
+            var poems = await _poemRepository.GetAllWithParamsAsync(x => true);
+
+            return new CustomActionResult(HttpStatusCode.OK, poems);
         }
 
         [HttpGet]
-        public async Task<Pagination<Poem>> GetAllPaginatedAsync(int page = 1, int size = 7, string search = "")
+        public async Task<IActionResult> GetAllPaginatedAsync(int page = 1, int size = 7, string search = "")
         {
-            return await _poemRepository.GeAllPaginatedAsync(page, size, search);
+            var poems = await _poemRepository.GeAllPaginatedAsync(page, size, search);
+
+            return new CustomActionResult(HttpStatusCode.OK, poems);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IEnumerable<Poem>> GetAllByUserAsync(string id)
+        [HttpGet("{id:length(24)}")]
+        public async Task<IActionResult> GetAllByUserAsync(string id)
         {
-            return await _poemRepository.GetAllWithParamsAsync(x => x.UserId == id);
+            var poems = await _poemRepository.GetAllWithParamsAsync(x => x.UserId == id);
+
+            return new CustomActionResult(HttpStatusCode.OK, poems);
         }
 
-        [HttpGet("{id}")]
-        public async Task<Poem> GetAsync(string id)
+        [HttpGet("{id:length(24)}")]
+        public async Task<IActionResult> GetAsync(string id)
         {
-            return await _poemRepository.GetWithParamsAsync(x => x.Id == id);
+            var poem = await _poemRepository.GetWithParamsAsync(x => x.Id == id);
+
+            return new CustomActionResult(HttpStatusCode.OK, poem);
         }
 
         [HttpPost]
-        public async Task PostAsync([FromBody] CreatePoemInputModel poem)
+        public async Task<IActionResult> PostAsync([FromBody] CreatePoemInputModel poem)
         {
             await _poemService.CreatePoem(poem);
+
+            return new CustomActionResult(HttpStatusCode.Created, poem);
         }
-        [HttpDelete("{id}")]
-        public async Task DeleteAsync(string id)
+
+        [HttpDelete("{id:length(24)}")]
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             await _poemRepository.DeleteAsync(id);
+
+            return new CustomActionResult(HttpStatusCode.OK);
         }
     }
 }

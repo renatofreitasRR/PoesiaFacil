@@ -45,9 +45,6 @@ namespace PoesiaFacil.Data.Repositories
                 .Find(filter)
                 .FirstOrDefaultAsync();
 
-            if (document is null)
-                throw new Exception();
-
             return document;
         }
     }

@@ -7,6 +7,7 @@ using PoesiaFacil.Data.Repositories;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
 using PoesiaFacil.Mappings;
+using PoesiaFacil.Middlewares;
 using PoesiaFacil.Models;
 using PoesiaFacil.Services;
 using PoesiaFacil.Services.Contracts;
@@ -94,6 +95,8 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
