@@ -19,8 +19,9 @@ namespace PoesiaFacil.Helpers
 
             var claims = new List<Claim>()
             {
-                new Claim("name", user.Name),
-                new Claim("email", user.Email),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.PrimarySid, user.Id),
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

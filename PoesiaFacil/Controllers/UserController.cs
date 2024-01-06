@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
 using PoesiaFacil.Helpers;
 using PoesiaFacil.Models.InputModels.User;
+using PoesiaFacil.Models.ViewModels.User;
 using PoesiaFacil.Services.Contracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,25 +24,29 @@ namespace PoesiaFacil.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IHttpContextAccessor _context;
-        public UserController(IUserRepository userRepository, IUserService userService, IPasswordHasher<User> passwordHasher, IHttpContextAccessor context)
+        private readonly IMapper _mapper;
+        public UserController(IUserRepository userRepository, IUserService userService, IPasswordHasher<User> passwordHasher, IMapper mapper)
         {
             _userRepository = userRepository;
             _userService = userService;
             _passwordHasher = passwordHasher;
-            _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet()]
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<UserViewModel>> GetAllAsync()
         {
-            return await _userRepository.GetAllWithParamsAsync(x => true);
+            var users = await _userRepository.GetAllWithParamsAsync(x => true);
+
+            return _mapper.Map<IEnumerable<UserViewModel>>(users);
         }
 
         [HttpGet("{id}")]
-        public async Task<User> GetAsync(string id)
+        public async Task<UserViewModel> GetAsync(string id)
         {
-            return await _userRepository.GetWithParamsAsync(x => x.Id == id);
+            var user = await _userRepository.GetWithParamsAsync(x => x.Id == id);
+
+            return _mapper.Map<UserViewModel>(user);
         }
 
         [HttpPost]
@@ -52,19 +59,29 @@ namespace PoesiaFacil.Controllers
         [AllowAnonymous]
         public async Task<object> SignInAsync(string email, string password)
         {
-            User user = await _userRepository.GetWithParamsAsync(x => x.Email == email);
+            try
+            {
+                User user = await _userRepository.GetWithParamsAsync(x => x.Email == email);
 
-            if (user == null)
-                throw new Exception("Usuário não encontrado");
+                var userMapped = _mapper.Map<UserViewModel>(user);
 
-            PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
+                if (user == null)
+                    throw new Exception("Usuário não encontrado");
 
-            if(result == PasswordVerificationResult.Failed)
-                throw new Exception("Falha na verificação das esnhas");
+                PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
 
-            var token = JwtTokenHelper.GetToken(user);
+                if (result == PasswordVerificationResult.Failed)
+                    throw new Exception("Falha na verificação das esnhas");
 
-            return new { token, user };
+                var token = JwtTokenHelper.GetToken(user);
+
+                return new { token, userMapped };
+            }
+            catch(Exception ex)
+            {
+                return new { };
+            }
+            
         }
 
         [HttpPut("{id}")]

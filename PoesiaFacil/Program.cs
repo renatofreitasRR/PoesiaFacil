@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using PoesiaFacil.Data.Repositories;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
+using PoesiaFacil.Mappings;
 using PoesiaFacil.Models;
 using PoesiaFacil.Services;
 using PoesiaFacil.Services.Contracts;
@@ -40,6 +40,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(UserMapping));
 
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
