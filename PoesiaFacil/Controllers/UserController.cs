@@ -54,9 +54,9 @@ namespace PoesiaFacil.Controllers
             if (user == null)
                 return new CustomActionResult(HttpStatusCode.NotFound, "Usuário não encontrado");
 
-            var userMapped = _mapper.Map<IEnumerable<UserViewModel>>(user);
+            var userMapped = _mapper.Map<UserViewModel>(user);
 
-            return new CustomActionResult(HttpStatusCode.OK, user);
+            return new CustomActionResult(HttpStatusCode.OK, userMapped);
         }
 
         [HttpPost]
