@@ -6,6 +6,7 @@ using PoesiaFacil.Controllers.Contracts;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
 using PoesiaFacil.Helpers;
+using PoesiaFacil.Helpers.Contracts;
 using PoesiaFacil.Models.InputModels.User;
 using PoesiaFacil.Models.ViewModels.User;
 using PoesiaFacil.Services.Contracts;
@@ -24,12 +25,14 @@ namespace PoesiaFacil.Controllers
         private readonly IUserService _userService;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userRepository, IUserService userService, IPasswordHasher<User> passwordHasher, IMapper mapper)
+        private readonly IJwtTokenHelper _tokenHelper;
+        public UserController(IUserRepository userRepository, IUserService userService, IPasswordHasher<User> passwordHasher, IMapper mapper, IJwtTokenHelper tokenHelper)
         {
             _userRepository = userRepository;
             _userService = userService;
             _passwordHasher = passwordHasher;
             _mapper = mapper;
+            _tokenHelper = tokenHelper;
         }
 
         [HttpGet()]
@@ -68,8 +71,6 @@ namespace PoesiaFacil.Controllers
         {
             User user = await _userRepository.GetWithParamsAsync(x => x.Email == email);
 
-            var userMapped = _mapper.Map<UserViewModel>(user);
-
             if (user == null)
                 return new CustomActionResult(HttpStatusCode.NotFound, "Usuário não encontrado");
 
@@ -78,9 +79,11 @@ namespace PoesiaFacil.Controllers
             if (result == PasswordVerificationResult.Failed)
                 return new CustomActionResult(HttpStatusCode.BadRequest, "Senha inválida");
 
-            var token = JwtTokenHelper.GetToken(user);
+            var token = _tokenHelper.GetToken(user);
 
-            return new CustomActionResult(HttpStatusCode.OK, new { Token = token, User = userMapped });
+            var userMapped = _mapper.Map<UserViewModel>(user);
+
+            return new CustomActionResult(HttpStatusCode.OK, new TokenAndUserViewModel { Token = token, User = userMapped });
         }
 
         [HttpPut("{id:length(24)}")]

@@ -10,6 +10,8 @@ namespace PoesiaFacil.Controllers.Contracts
         private readonly object? _data;
         private readonly HttpStatusCode _statusCode;
         private ControllerResultViewModel _returnData = new ControllerResultViewModel();
+        public HttpStatusCode StatusCode => _statusCode;
+        public List<string> Errors => _returnData.Errors;
 
         public CustomActionResult(HttpStatusCode statusCode, object? data = null)
         {

@@ -6,8 +6,6 @@ using PoesiaFacil.Models.InputModels.Poem;
 using PoesiaFacil.Services.Contracts;
 using System.Net;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace PoesiaFacil.Controllers
 {
     [Authorize]

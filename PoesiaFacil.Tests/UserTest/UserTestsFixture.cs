@@ -37,7 +37,7 @@ namespace PoesiaFacil.Tests.PoemTest
 
         public CreateUserInputModel GenerateValidUserInputModelStatic()
         {
-            var user =  new CreateUserInputModel
+            var user = new CreateUserInputModel
             {
                 Name = "Renato Freitas",
                 ArtisticName = "Renatinho",
@@ -51,15 +51,12 @@ namespace PoesiaFacil.Tests.PoemTest
 
         public User GenerateValidUser()
         {
-            var user = new Faker<User>("pt_BR")
-                .CustomInstantiator(f => new User
-                {
-                    Name = f.Name.FullName(),
-                    ArtisticName = f.Name.FullName(),
-                    Email = f.Internet.Email(f.Name.FullName(), f.Name.LastName()),
-                    Description = f.Name.JobDescriptor(),
-                    Password = f.Name.FullName(),
-                });
+            var user = new User
+            {
+                Name = "Usuário teste",
+                Email = "unit.teste@teste.com",
+                Password = "teste12345",
+            };
 
             return user;
         }

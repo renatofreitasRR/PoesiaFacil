@@ -3,10 +3,13 @@ using Moq;
 using Moq.AutoMock;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
+using PoesiaFacil.Models;
 using PoesiaFacil.Services;
+using PoesiaFacil.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +34,16 @@ namespace PoesiaFacil.Tests.PoemTest
             var mocker = new AutoMocker();
             var poemService = mocker.CreateInstance<PoemService>();
 
+            mocker
+                .GetMock<ICurrentUserService>()
+                .Setup(r => r.GetUser())
+                .Returns(new ContextUser
+                    {
+                        Email = "UnitTest@email.com",
+                        Id = "654a88d48e0d705d988ff871",
+                        Name = "Unit Test"
+                    });
+
             //Act
             var result = await poemService.CreatePoem(poem);
 
@@ -46,6 +59,16 @@ namespace PoesiaFacil.Tests.PoemTest
             var poem = _poemFixture.GenerateInvalidPoemInputModel();
             var mocker = new AutoMocker();
             var poemService = mocker.CreateInstance<PoemService>();
+
+            mocker
+                .GetMock<ICurrentUserService>()
+                .Setup(r => r.GetUser())
+                .Returns(new ContextUser
+                {
+                    Email = "UnitTest@email.com",
+                    Id = "654a88d48e0d705d988ff871",
+                    Name = "Unit Test"
+                });
 
             //Act
             var result = await poemService.CreatePoem(poem);

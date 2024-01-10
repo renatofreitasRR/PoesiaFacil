@@ -6,6 +6,8 @@ using Microsoft.OpenApi.Models;
 using PoesiaFacil.Data.Repositories;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
+using PoesiaFacil.Helpers;
+using PoesiaFacil.Helpers.Contracts;
 using PoesiaFacil.Mappings;
 using PoesiaFacil.Middlewares;
 using PoesiaFacil.Models;
@@ -53,6 +55,9 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<IPoemRepository, PoemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+builder.Services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
 
 builder.Services.AddSwaggerGen(c =>
 {

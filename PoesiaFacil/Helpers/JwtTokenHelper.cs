@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using PoesiaFacil.Entities;
+using PoesiaFacil.Helpers.Contracts;
 using PoesiaFacil.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,9 +10,9 @@ using System.Text;
 
 namespace PoesiaFacil.Helpers
 {
-    public static class JwtTokenHelper
+    public class JwtTokenHelper: IJwtTokenHelper
     {
-        public static string GetToken(User user)
+        public string GetToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
