@@ -12,24 +12,23 @@ namespace PoesiaFacil.Services
     public class PoemService : IPoemService
     {
         private readonly IPoemRepository _poemRepository;
-        private readonly IHttpContextAccessor _context;
+        private readonly ICurrentUserService _userService;
 
-        public PoemService(IPoemRepository poemRepository, IHttpContextAccessor context)
+        public PoemService(IPoemRepository poemRepository, ICurrentUserService userService)
         {
             _poemRepository = poemRepository;
-            _context = context;
+            _userService = userService;
         }
 
         public async Task<bool> CreatePoem(CreatePoemInputModel poemInputModel)
         {
-            //var currentUser = _context.HttpContext.User;
-            //var currentUserId = currentUser.Claims.First(x => x.Type == ClaimTypes.PrimarySid).Value;
+            var currentUser = _userService.GetUser();
 
             Poem poem = new Poem
             {
                 Title = poemInputModel.Title,
-                //Author = currentUser.Identity.Name,
-                //UserId = currentUserId,
+                Author = currentUser.Name,
+                UserId = currentUser.Id,
                 PublishDate = DateTime.Now,
                 Text = poemInputModel.Text,
                 IsAnonymous = false,

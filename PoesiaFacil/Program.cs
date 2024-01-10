@@ -49,6 +49,7 @@ builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<IPoemService, PoemService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<IPoemRepository, PoemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
