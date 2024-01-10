@@ -1,20 +1,15 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Common;
 using PoesiaFacil.Controllers.Contracts;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
 using PoesiaFacil.Helpers;
-using PoesiaFacil.Models;
 using PoesiaFacil.Models.InputModels.User;
 using PoesiaFacil.Models.ViewModels.User;
 using PoesiaFacil.Services.Contracts;
 using System.Net;
-using System.Net.Mail;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

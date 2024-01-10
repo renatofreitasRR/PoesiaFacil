@@ -2,6 +2,8 @@
 using MongoDB.Bson;
 using Microsoft.AspNetCore.Identity;
 using PoesiaFacil.Entities.Contracts;
+using PoesiaFacil.Validators;
+using FluentValidation.Results;
 
 namespace PoesiaFacil.Entities
 {
@@ -29,6 +31,15 @@ namespace PoesiaFacil.Entities
         public void Deactivate()
         {
             this.IsActive = false;
+        }
+
+        public bool IsValid()
+        {
+            UserValidator validator = new UserValidator();
+
+            ValidationResult result = validator.Validate(this);
+
+            return result.IsValid;
         }
     }
 }

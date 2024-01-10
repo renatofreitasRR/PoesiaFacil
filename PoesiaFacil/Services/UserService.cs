@@ -14,7 +14,7 @@ namespace PoesiaFacil.Services
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
 
-        public UserService(IUserRepository userRepository,IPasswordHasher<User> passwordHasher)
+        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
@@ -28,19 +28,18 @@ namespace PoesiaFacil.Services
                 Email = userInputModel.Email,
                 Description = userInputModel.Description,
                 ArtisticName = userInputModel.ArtisticName,
+                Password = userInputModel.Password,
                 IsActive = true,
             };
 
             user.Password = _passwordHasher.HashPassword(user, userInputModel.Password);
 
-            UserValidator validator = new UserValidator();
-
-            ValidationResult result = validator.Validate(user);
-
-            if (result.IsValid)
+            if (user.IsValid())
                 await _userRepository.CreateAsync(user);
+            else
+                return false;
 
-            return false;
+            return true;
         }
     }
 }

@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PoesiaFacil.Controllers.Contracts;
 using PoesiaFacil.Data.Repositories.Contracts;
-using PoesiaFacil.Entities;
 using PoesiaFacil.Models.InputModels.Poem;
-using PoesiaFacil.Models.ViewModels;
 using PoesiaFacil.Services.Contracts;
-using System.Drawing;
 using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

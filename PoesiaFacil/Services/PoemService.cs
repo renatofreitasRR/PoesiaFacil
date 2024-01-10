@@ -22,27 +22,25 @@ namespace PoesiaFacil.Services
 
         public async Task<bool> CreatePoem(CreatePoemInputModel poemInputModel)
         {
-            var currentUser = _context.HttpContext.User;
-            var currentUserId = currentUser.Claims.First(x => x.Type == ClaimTypes.PrimarySid).Value;
+            //var currentUser = _context.HttpContext.User;
+            //var currentUserId = currentUser.Claims.First(x => x.Type == ClaimTypes.PrimarySid).Value;
 
             Poem poem = new Poem
             {
                 Title = poemInputModel.Title,
-                Author = currentUser.Identity.Name,
-                UserId = currentUserId,
+                //Author = currentUser.Identity.Name,
+                //UserId = currentUserId,
                 PublishDate = DateTime.Now,
                 Text = poemInputModel.Text,
                 IsAnonymous = false,
             };
 
-            PoemValidator validator = new PoemValidator();
-
-            ValidationResult result = validator.Validate(poem);
-
-            if (result.IsValid)
+            if (poem.IsValid())
                 await _poemRepository.CreateAsync(poem);
+            else
+                return false;
 
-            return false;
+            return true;
         }
     }
 }
