@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using PoesiaFacil.Controllers.Contracts;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
@@ -84,6 +88,40 @@ namespace PoesiaFacil.Controllers
             var userMapped = _mapper.Map<UserViewModel>(user);
 
             return new CustomActionResult(HttpStatusCode.OK, new TokenAndUserViewModel { Token = token, User = userMapped });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task Base()
+        {
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleSignInAsync()
+        {
+            await HttpContext
+                .ChallengeAsync(GoogleDefaults.AuthenticationScheme, 
+                new AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("GoogleResponse")
+                }
+            );
+
+            return new CustomActionResult(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext
+                .AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claims = result.Principal.Identities.FirstOrDefault().Claims.ToList();
+
+
+            return new CustomActionResult(HttpStatusCode.OK, claims);
         }
 
         [HttpPut("{id:length(24)}")]
