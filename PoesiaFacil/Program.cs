@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +19,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+//Login Authentication
 builder.Services
     .AddAuthentication(x =>
     {
@@ -34,7 +38,28 @@ builder.Services
             ValidateIssuer = false,
             ValidateAudience = false
         };
-    });
+    })
+    .AddCookie()
+    .AddGoogle(GoogleDefaults.AuthenticationScheme, x =>
+    {
+        x.ClientId = builder.Configuration.GetSection("GoogleCredentials:ClientId").Value;
+        x.ClientSecret = builder.Configuration.GetSection("GoogleCredentials:ClientSecretId").Value;
+    }); ;
+
+//Google Authentication
+//builder.Services
+//    .AddAuthentication(x =>
+//    {
+//        x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//        x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    })
+//    .AddCookie()
+//    .AddGoogle(GoogleDefaults.AuthenticationScheme, x =>
+//    {
+//        x.ClientId = builder.Configuration.GetSection("GoogleCredentials:ClientId").Value;
+//        x.ClientSecret = builder.Configuration.GetSection("GoogleCredentials:ClientSecretId").Value;
+//    });
+
     
 
 // Add services to the container.
@@ -55,7 +80,6 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<IPoemRepository, PoemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
 
 builder.Services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
 
@@ -98,7 +122,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 
 var app = builder.Build();
 
