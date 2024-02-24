@@ -3,3 +3,5 @@ Login Social Google - 08/01/2024
 Adicionar Roles - 08/01/2024
 Fila de poemas para linha do tempo - 08/01/2024
 Upload de imagem - 08/01/2024
+Requisição de amizade entre usuários
+Fila para envio de emails
