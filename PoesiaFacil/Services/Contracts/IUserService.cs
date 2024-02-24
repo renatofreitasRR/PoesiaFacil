@@ -4,6 +4,6 @@ namespace PoesiaFacil.Services.Contracts
 {
     public interface IUserService
     {
-        Task<bool> CreateUser(CreateUserInputModel userInputModel);
+        Task<bool> CreateUserAsync(CreateUserInputModel userInputModel);
     }
 }

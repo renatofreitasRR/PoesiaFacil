@@ -4,8 +4,8 @@ using Moq.AutoMock;
 using PoesiaFacil.Data.Repositories.Contracts;
 using PoesiaFacil.Entities;
 using PoesiaFacil.Models;
-using PoesiaFacil.Services;
 using PoesiaFacil.Services.Contracts;
+using PoesiaFacil.Services.Poem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace PoesiaFacil.Tests.PoemTest
             //Arrange
             var poem = _poemFixture.GenerateValidPoemInputModel();
             var mocker = new AutoMocker();
-            var poemService = mocker.CreateInstance<PoemService>();
+            var poemService = mocker.CreateInstance<CreatePoemService>();
 
             mocker
                 .GetMock<ICurrentUserService>()
@@ -45,7 +45,7 @@ namespace PoesiaFacil.Tests.PoemTest
                     });
 
             //Act
-            var result = await poemService.CreatePoem(poem);
+            var result = await poemService.CreatePoemAsync(poem);
 
             //Assert
             Assert.True(result);
@@ -58,7 +58,7 @@ namespace PoesiaFacil.Tests.PoemTest
             //Arrange
             var poem = _poemFixture.GenerateInvalidPoemInputModel();
             var mocker = new AutoMocker();
-            var poemService = mocker.CreateInstance<PoemService>();
+            var poemService = mocker.CreateInstance<CreatePoemService>();
 
             mocker
                 .GetMock<ICurrentUserService>()
@@ -71,7 +71,7 @@ namespace PoesiaFacil.Tests.PoemTest
                 });
 
             //Act
-            var result = await poemService.CreatePoem(poem);
+            var result = await poemService.CreatePoemAsync(poem);
 
             //Assert
             Assert.False(result);

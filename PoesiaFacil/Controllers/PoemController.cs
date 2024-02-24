@@ -57,7 +57,7 @@ namespace PoesiaFacil.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] CreatePoemInputModel poem)
         {
-            await _poemService.CreatePoem(poem);
+            await _poemService.CreatePoemAsync(poem);
 
             return new CustomActionResult(HttpStatusCode.Created, poem);
         }

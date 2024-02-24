@@ -1,9 +1,8 @@
-﻿
-using PoesiaFacil.Models;
+﻿using PoesiaFacil.Models;
 using PoesiaFacil.Services.Contracts;
 using System.Security.Claims;
 
-namespace PoesiaFacil.Services
+namespace PoesiaFacil.Services.User
 {
     public class CurrentUserService : ICurrentUserService
     {

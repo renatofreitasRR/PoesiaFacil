@@ -9,5 +9,6 @@ namespace PoesiaFacil.Data.Repositories.Contracts
         Task DeleteAsync(string id);
         Task<IEnumerable<T>> GetAllWithParamsAsync(Expression<Func<T, bool>> filter);
         Task<T> GetWithParamsAsync(Expression<Func<T, bool>> filter);
+        Task<bool> Existsync(Expression<Func<T, bool>> filter);
     }
 }

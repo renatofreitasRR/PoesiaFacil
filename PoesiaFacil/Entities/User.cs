@@ -9,6 +9,7 @@ namespace PoesiaFacil.Entities
 {
     public class User : IEntity
     {
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -40,6 +41,12 @@ namespace PoesiaFacil.Entities
             ValidationResult result = validator.Validate(this);
 
             return result.IsValid;
+        }
+
+        public void AddConnection(string userId)
+        {
+            if (this.Connections != null)
+                this.Connections.Add(userId);
         }
     }
 }

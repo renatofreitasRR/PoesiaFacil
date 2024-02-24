@@ -11,8 +11,10 @@ using PoesiaFacil.Helpers.Contracts;
 using PoesiaFacil.Mappings;
 using PoesiaFacil.Middlewares;
 using PoesiaFacil.Models;
-using PoesiaFacil.Services;
+using PoesiaFacil.Services.Connection;
 using PoesiaFacil.Services.Contracts;
+using PoesiaFacil.Services.Poem;
+using PoesiaFacil.Services.User;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,12 +51,14 @@ builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddScoped<IPoemService, PoemService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPoemService, CreatePoemService>();
+builder.Services.AddScoped<IUserService, CreateUserService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IConnectionRequestService, ConnectionRequestService>();
 
 builder.Services.AddScoped<IPoemRepository, PoemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IConnectionRequestRepository, ConnectionRequestRepository>();
 
 
 builder.Services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();

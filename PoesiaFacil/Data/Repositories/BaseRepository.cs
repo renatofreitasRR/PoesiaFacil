@@ -30,6 +30,15 @@ namespace PoesiaFacil.Data.Repositories
             await _collection.DeleteOneAsync(id);
         }
 
+        public async Task<bool> Existsync(Expression<Func<T, bool>> filter)
+        {
+            var exists = await _collection
+                .Find(filter)
+                .AnyAsync();
+
+            return exists;
+        }
+
         public async Task<IEnumerable<T>> GetAllWithParamsAsync(Expression<Func<T, bool>> filter)
         {
             var poems = await _collection

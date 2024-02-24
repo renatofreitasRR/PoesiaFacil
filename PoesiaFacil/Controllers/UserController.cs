@@ -60,7 +60,7 @@ namespace PoesiaFacil.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] CreateUserInputModel user)
         {
-            await _userService.CreateUser(user);
+            await _userService.CreateUserAsync(user);
 
             return new CustomActionResult(HttpStatusCode.Created, user);
         }

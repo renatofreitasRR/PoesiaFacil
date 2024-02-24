@@ -1,28 +1,25 @@
-﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Identity;
-using PoesiaFacil.Data.Repositories;
+﻿using Microsoft.AspNetCore.Identity;
 using PoesiaFacil.Data.Repositories.Contracts;
-using PoesiaFacil.Entities;
 using PoesiaFacil.Models.InputModels.User;
 using PoesiaFacil.Services.Contracts;
-using PoesiaFacil.Validators;
+using PoesiaFacil.Entities;
 
-namespace PoesiaFacil.Services
+namespace PoesiaFacil.Services.User
 {
-    public class UserService : IUserService
+    public class CreateUserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IPasswordHasher<Entities.User> _passwordHasher;
 
-        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
+        public CreateUserService(IUserRepository userRepository, IPasswordHasher<Entities.User> passwordHasher)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<bool> CreateUser(CreateUserInputModel userInputModel)
+        public async Task<bool> CreateUserAsync(CreateUserInputModel userInputModel)
         {
-            User user = new User
+            Entities.User user = new Entities.User
             {
                 Name = userInputModel.Name,
                 Email = userInputModel.Email,

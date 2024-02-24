@@ -13,7 +13,7 @@ using PoesiaFacil.Helpers;
 using PoesiaFacil.Helpers.Contracts;
 using PoesiaFacil.Models.InputModels.User;
 using PoesiaFacil.Models.ViewModels.User;
-using PoesiaFacil.Services;
+using PoesiaFacil.Services.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,14 +41,14 @@ namespace PoesiaFacil.Tests.PoemTest
             //Arrange
             var userInputModel = _userFixture.GenerateValidUserInputModelStatic();
             var mocker = new AutoMocker();
-            var userService = mocker.CreateInstance<UserService>();
+            var userService = mocker.CreateInstance<CreateUserService>();
 
             mocker.GetMock<IPasswordHasher<User>>()
                   .Setup(m => m.HashPassword(It.IsAny<User>(), It.IsAny<string>()))
                   .Returns("Hash value");
 
             //Act
-            var result = await userService.CreateUser(userInputModel);
+            var result = await userService.CreateUserAsync(userInputModel);
 
             //Assert
             Assert.True(result);
@@ -61,10 +61,10 @@ namespace PoesiaFacil.Tests.PoemTest
             //Arrange
             var user = _userFixture.GenerateInvalidUserInputModel();
             var mocker = new AutoMocker();
-            var userService = mocker.CreateInstance<UserService>();
+            var userService = mocker.CreateInstance<CreateUserService>();
 
             //Act
-            var result = await userService.CreateUser(user);
+            var result = await userService.CreateUserAsync(user);
 
             //Assert
             Assert.False(result);
